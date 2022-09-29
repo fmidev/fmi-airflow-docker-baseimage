@@ -1,2 +1,2 @@
-FROM apache/airflow:2.3.3
-RUN pip install 'astronomer-providers[amazon]' 'astronomer-providers[cncf.kubernetes]' 'astronomer-providers[google]' 'astronomer-providers[http]' 'astronomer-providers[snowflake]'
+FROM apache/airflow:2.4.0
+RUN pip install 'astronomer-providers[all]==1.9.0'
