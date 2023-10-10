@@ -7,9 +7,9 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 USER airflow
-RUN pip install 'astronomer-providers[amazon]==1.9.0' \
-    	    'astronomer-providers[cncf.kubernetes]==1.9.0' \
-	    'astronomer-providers[google]==1.9.0' \
-	    'astronomer-providers[http]==1.9.0' \
-	    'astronomer-providers[snowflake]==1.9.0' \
+RUN pip install 'astronomer-providers[amazon]==1.18.0' \
+    	    'astronomer-providers[cncf.kubernetes]==1.18.0' \
+	    'astronomer-providers[google]==1.18.0' \
+	    'astronomer-providers[http]==1.18.0' \
+	    'astronomer-providers[snowflake]==1.18.0' \
 	    'apache-airflow[statsd]'
