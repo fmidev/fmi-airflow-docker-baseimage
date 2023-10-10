@@ -1,4 +1,4 @@
-FROM apache/airflow:2.6.0
+FROM apache/airflow:2.7.1
 USER root
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -11,4 +11,5 @@ RUN pip install 'astronomer-providers[amazon]==1.9.0' \
     	    'astronomer-providers[cncf.kubernetes]==1.9.0' \
 	    'astronomer-providers[google]==1.9.0' \
 	    'astronomer-providers[http]==1.9.0' \
-	    'astronomer-providers[snowflake]==1.9.0'
+	    'astronomer-providers[snowflake]==1.9.0' \
+	    'apache-airflow[statsd]'
