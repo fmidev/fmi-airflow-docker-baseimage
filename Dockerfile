@@ -12,4 +12,5 @@ RUN pip install 'astronomer-providers[amazon]==1.18.0' \
 	    'astronomer-providers[google]==1.18.0' \
 	    'astronomer-providers[http]==1.18.0' \
 	    'astronomer-providers[snowflake]==1.18.0' \
-	    'apache-airflow[statsd]'
+	    'apache-airflow[statsd]' \
+	    'apache-airflow[celery]'
