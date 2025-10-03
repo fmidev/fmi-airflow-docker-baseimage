@@ -1,7 +1,9 @@
+# Use Airflow 3 base image
 FROM apache/airflow:3.1.0
 
 USER root
 
+# Install OS-level dependencies
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
          libpq-dev libgeos-dev gdal-bin libgdal-dev libhdf5-dev hdf5-tools \
@@ -11,15 +13,18 @@ RUN apt-get update \
 
 USER airflow
 
+# Install Python dependencies (Airflow extras, providers, and scientific libraries)
 RUN pip install --no-cache-dir \
-    'astronomer-providers[amazon]' \
-    'astronomer-providers[cncf.kubernetes]' \
-    'astronomer-providers[google]' \
-    'astronomer-providers[http]' \
-    'astronomer-providers[snowflake]' \
-    'apache-airflow[statsd]' \
-    'apache-airflow[celery]' \
-    'numpy==2.3.3' \
-    'scipy==1.12.3' \
-    'scikit-learn==1.7.2' \
+    "astronomer-providers[amazon]==1.19.4" \
+    "astronomer-providers[cncf.kubernetes]==1.19.4" \
+    "astronomer-providers[google]==1.19.4" \
+    "astronomer-providers[http]==1.19.4" \
+    "astronomer-providers[snowflake]==1.19.4" \
+    "apache-airflow[statsd]" \
+    "apache-airflow[celery]" \
+    "numpy==2.3.3" \
+    "scipy==1.12.2" \
+    "scikit-learn==1.7.2" \
   && pip check
+
+# (Optional) you can add a healthcheck or some sanity test here
