@@ -24,7 +24,8 @@ RUN pip install --no-cache-dir \
     "apache-airflow[celery]" \
     "numpy==2.3.3" \
     "scikit-learn==1.7.2" \
-    #"scipy==1.13,<2.0" \
+    "pandas==2.2.3" \
+    #"scipy==1.13" \
   && pip check
 
 # (Optional) you can add a healthcheck or some sanity test here
