@@ -1,5 +1,5 @@
 # Use Airflow 3 base image
-FROM apache/airflow:3.1.3
+FROM apache/airflow:3.1.2
 
 USER root
 
