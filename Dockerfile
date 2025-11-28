@@ -1,5 +1,5 @@
 # Use Airflow 3 base image
-FROM apache/airflow:3.1.2
+FROM apache/airflow:3.1.3
 
 USER root
 
@@ -25,7 +25,6 @@ RUN pip install --no-cache-dir \
     "numpy==2.3.3" \
     "scikit-learn==1.7.2" \
     "pandas==2.2.3" \
-    #"scipy==1.13" \
   && pip check
 
 # (Optional) you can add a healthcheck or some sanity test here
