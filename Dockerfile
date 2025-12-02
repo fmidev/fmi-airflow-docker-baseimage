@@ -20,5 +20,7 @@ RUN pip install --no-cache-dir \
     apache-airflow[celery] \
     numpy==1.26.4 \
     pandas==2.1.4 \
-    scikit-learn==1.3.2 \
+    scikit-learn==1.3.2 \ 
+    scipy==1.12.0 \
+    dask[dataframe,distributed]==2024.1.0 \
   && pip check
