@@ -22,9 +22,7 @@ RUN pip install --no-cache-dir \
     "astronomer-providers[snowflake]==1.19.4" \
     "apache-airflow[statsd]" \
     "apache-airflow[celery]" \
-    "numpy==2.3.3" \
-    "scikit-learn==1.7.2" \
-    "pandas==2.2.3" \
+    "numpy==1.26.4" \
+    "pandas==2.1.4" \
+    "scikit-learn==1.3.2" \
   && pip check
-
-# (Optional) you can add a healthcheck or some sanity test here
