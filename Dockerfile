@@ -1,4 +1,5 @@
-FROM apache/airflow:3.1.3
+FROM apache/airflow:3.1.3-python3.12
+#FROM apache/airflow:3.1.3
 
 USER root
 
@@ -12,7 +13,6 @@ USER airflow
 
 RUN pip install --no-cache-dir \
     apache-airflow-providers-common-io \
-    apache-airflow-providers-filesystem \
     apache-airflow-providers-amazon \
     apache-airflow-providers-cncf-kubernetes \
     apache-airflow-providers-google \
