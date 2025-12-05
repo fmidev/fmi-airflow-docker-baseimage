@@ -22,5 +22,5 @@ RUN pip install --no-cache-dir \
     pandas==2.1.4 \
     scikit-learn==1.3.2 \ 
     scipy==1.12.0 \
-    dask[dataframe,distributed]==2024.1.0 \
+    dask[dataframe,distributed]==2025.5.1 \
   && pip check
