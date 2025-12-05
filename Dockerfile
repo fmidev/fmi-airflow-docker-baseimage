@@ -11,6 +11,7 @@ RUN apt-get update \
 USER airflow
 
 RUN pip install --no-cache-dir \
+    apache-airflow-providers-common-io \
     apache-airflow-providers-amazon \
     apache-airflow-providers-cncf-kubernetes \
     apache-airflow-providers-google \
