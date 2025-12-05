@@ -12,6 +12,7 @@ USER airflow
 
 RUN pip install --no-cache-dir \
     apache-airflow-providers-common-io \
+    apache-airflow-providers-filesystem \
     apache-airflow-providers-amazon \
     apache-airflow-providers-cncf-kubernetes \
     apache-airflow-providers-google \
@@ -24,4 +25,5 @@ RUN pip install --no-cache-dir \
     scikit-learn==1.3.2 \ 
     scipy==1.12.0 \
     dask[dataframe,distributed]==2025.5.1 \
+    xarray==2024.07.0 \
   && pip check
