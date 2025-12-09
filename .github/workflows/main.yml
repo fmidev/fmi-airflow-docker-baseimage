@@ -1,0 +1,39 @@
+name: Build and Push Image
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Build and push image
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Get short SHA
+      id: vars
+      run: echo "short_sha=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
+      
+    - name: Build Image
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: fmi-airflow-docker-baseimage
+        tags: latest ${{ github.ref_name }} ${{ steps.vars.outputs.short_sha }}
+        containerfiles: |
+          ./Dockerfile
+
+    - name: Push To quay.io
+      id: push-to-quay
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+        registry: quay.io/fmi
+        username: ${{ secrets.IMAGE_REGISTRY_USER }}
+        password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
+
+    - name: Print image url
+      run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
