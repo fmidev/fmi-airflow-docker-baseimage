@@ -2,12 +2,14 @@
 # The official image already includes the providers used here (amazon, celery,
 # cncf-kubernetes, common-io, docker, google, http, snowflake) and statsd.
 ARG AIRFLOW_VERSION=2.11.2
-ARG PYTHON_VERSION=3.12
+# Not PYTHON_VERSION: the base image sets ENV PYTHON_VERSION=3.12.x, which
+# some builders let override an ARG of the same name.
+ARG PYTHON_MINOR=3.12
 
-FROM apache/airflow:${AIRFLOW_VERSION}-python${PYTHON_VERSION}
+FROM apache/airflow:${AIRFLOW_VERSION}-python${PYTHON_MINOR}
 
 ARG AIRFLOW_VERSION
-ARG PYTHON_VERSION
+ARG PYTHON_MINOR
 
 USER root
 
@@ -32,5 +34,5 @@ RUN pip install --no-cache-dir \
     "apache-airflow==${AIRFLOW_VERSION}" \
     "astronomer-providers[amazon,cncf.kubernetes,google,http,snowflake]==1.18.0" \
     "rasterio==1.4.4" \
-    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt" \
+    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_MINOR}.txt" \
   && pip check
