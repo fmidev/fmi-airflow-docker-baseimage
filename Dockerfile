@@ -1,33 +1,36 @@
-FROM apache/airflow:3.3.1-python3.12
-#FROM apache/airflow:3.2.0-python3.12
-#FROM apache/airflow:3.1.3-python3.12
-#FROM apache/airflow:2.11.0
-#FROM apache/airflow:3.1.3
-#
+# FMI Airflow base image, Airflow 2.x line.
+# The official image already includes the providers used here (amazon, celery,
+# cncf-kubernetes, common-io, docker, google, http, snowflake) and statsd.
+ARG AIRFLOW_VERSION=2.11.2
+ARG PYTHON_VERSION=3.12
+
+FROM apache/airflow:${AIRFLOW_VERSION}-python${PYTHON_VERSION}
+
+ARG AIRFLOW_VERSION
+ARG PYTHON_VERSION
 
 USER root
 
+# The base image enables the PostgreSQL apt repository (pgdg), which also ships
+# newer GDAL, GEOS and PROJ. Take those from Debian (-t bookworm) so that the
+# gdal-bin tools used by BashOperator tasks keep their Debian 12 versions.
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-         libpq-dev libgeos-dev gdal-bin libgdal-dev libhdf5-dev hdf5-tools\
+  && apt-get install -y --no-install-recommends libpq-dev \
+  && apt-get install -y --no-install-recommends -t bookworm \
+         libgeos-dev gdal-bin libgdal-dev \
+  && apt-get autoremove -yqq --purge \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
 USER airflow
 
+# Pinning apache-airflow and using the constraints file keeps pip from
+# upgrading Airflow or its dependencies to satisfy the extra packages.
+# astronomer-providers is deprecated upstream; kept for the DAGs that still use it.
+# rasterio wheels bundle their own GDAL, independent of the system gdal-bin.
 RUN pip install --no-cache-dir \
-    apache-airflow-providers-common-io \
-    apache-airflow-providers-amazon \
-    apache-airflow-providers-cncf-kubernetes \
-    apache-airflow-providers-google \
-    apache-airflow-providers-http \
-    apache-airflow-providers-snowflake \
-    apache-airflow[statsd] \
-    apache-airflow[celery] \
-    numpy==1.26.4 \
-    pandas==2.1.4 \
-    scikit-learn==1.3.2 \ 
-    scipy==1.12.0 \
-    dask[dataframe,distributed]==2025.5.1 \
-    xarray==2024.07.0 \
+    "apache-airflow==${AIRFLOW_VERSION}" \
+    "astronomer-providers[amazon,cncf.kubernetes,google,http,snowflake]==1.18.0" \
+    "rasterio==1.4.4" \
+    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt" \
   && pip check
