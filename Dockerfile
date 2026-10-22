@@ -30,9 +30,21 @@ USER airflow
 # upgrading Airflow or its dependencies to satisfy the extra packages.
 # astronomer-providers is deprecated upstream; kept for the DAGs that still use it.
 # rasterio wheels bundle their own GDAL, independent of the system gdal-bin.
-RUN pip install --no-cache-dir \
+#
+# Airflow 3 compatibility: common-compat >= 1.22.0 provides
+# airflow.providers.common.compat.sdk, which resolves to airflow.sdk on 3.x and
+# to the 2.x paths here, and the standard provider gives operator and sensor
+# imports that work on both versions. The constraints file pins common-compat
+# to 1.14.0, so that line is dropped; nothing else in the image caps it.
+RUN curl -fsSL -o /tmp/constraints.txt \
+      "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_MINOR}.txt" \
+  && sed -i '/^apache-airflow-providers-common-compat==/d' /tmp/constraints.txt \
+  && pip install --no-cache-dir \
     "apache-airflow==${AIRFLOW_VERSION}" \
+    "apache-airflow-providers-common-compat==1.22.0" \
+    "apache-airflow-providers-standard==1.20.1" \
     "astronomer-providers[amazon,cncf.kubernetes,google,http,snowflake]==1.18.0" \
     "rasterio==1.4.4" \
-    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_MINOR}.txt" \
-  && pip check
+    --constraint /tmp/constraints.txt \
+  && pip check \
+  && rm /tmp/constraints.txt
